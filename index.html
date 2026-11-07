@@ -1203,7 +1203,20 @@ function setCap(i,txt){txt=(txt||'').trim();const fo=i.closest('.fo.im');
  else if(g){if(g.dataset.al)i.dataset.al=g.dataset.al;g.replaceWith(i)}}
 const capImg=()=>selFo&&selFo.classList.contains('im')&&pv.contains(selFo)?selFo.querySelector('img'):(selImg&&pv.contains(selImg)?selImg:null);
 document.querySelectorAll('.capin').forEach(inp=>inp.addEventListener('input',()=>{const i=capImg();if(!i)return;setCap(i,inp.value);later()}));
-
+// ===== Không cho gõ chen vào giữa ảnh và lời minh họa: đưa con trỏ ra sau khối ảnh =====
+function outOfFig(capEl){
+ const s=getSelection();if(!pv.isContentEditable)return false;
+ let fg=capEl&&capEl.closest('.body .fg');
+ if(!fg){if(!s.rangeCount||!s.isCollapsed)return false;
+  const n=s.anchorNode;if(!n||!pv.contains(n))return false;
+  const e=n.nodeType===1?n:n.parentElement;fg=e&&e.closest('.body .fg');if(!fg)return false;
+  if(n.nodeType===3&&!e.closest('.cap'))return false} // chữ đã gõ sẵn trong khối thì để yên
+ let nx=fg.nextSibling;
+ if(!nx||(nx.nodeType===3?!nx.nodeValue:nx.nodeName!=='BR')){nx=document.createElement('br');fg.after(nx);later()}
+ const r=document.createRange();r.setStartAfter(fg);r.collapse(true);s.removeAllRanges();s.addRange(r);return true}
+pv.addEventListener('mouseup',e=>{const c=e.target.closest&&e.target.closest('.cap');outOfFig(c);setTimeout(()=>outOfFig(c),0)});
+pv.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.key.length===1||e.key==='Enter'||e.key==='Process'||e.key==='Dead'||e.key==='Unidentified')outOfFig()},true);
 // ===== Khung biến đổi: kéo 4 góc đổi kích thước (giữ tỉ lệ) + xoay =====
 const TF=document.createElement('div');TF.id='tf';
 TF.innerHTML='<i class="nw" data-h="nw"></i><i class="ne" data-h="ne"></i><i class="sw" data-h="sw"></i><i class="se" data-h="se"></i><i class="rot" data-h="rot">↻</i><em></em>';
