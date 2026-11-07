@@ -625,6 +625,10 @@ body,button,input,select,textarea,kbd,#tf em{font-family:'Google Sans','Product 
 #fszm div:hover{background:var(--soft)}
 #fszm div.sel{background:var(--accs);color:var(--acc)}
 nter-events: none !important;
+/* ===== Khi in/xuất PDF: ẩn mọi thứ chèn thêm từ bên ngoài (vd. badge của host) ===== */
+@media print{
+ body>:not(.app):not(script):not(style):not(.pop),html>:not(head):not(body){display:none!important}
+}
 </style></head><body>
 <div class="app">
  <nav class="rail">
@@ -1931,4 +1935,14 @@ pv.addEventListener('keydown',e=>{
  $('#fsm').onclick=()=>stepBy(-.5);$('#fsp').onclick=()=>stepBy(.5);
  syncFsv();
 }
-</script><script src="ribbon.js"></script></body></html>
+</script><script src="ribbon.js"></script>
+<script>
+/* Ẩn phần tử lạ chèn vào trang (badge của host...) trong lúc in, rồi trả lại sau khi in */
+(()=>{let hid=[];
+ const sweep=()=>{const keep=e=>e.classList&&e.classList.contains('app')||/^(SCRIPT|STYLE|LINK|META|HEAD|BODY|TITLE|NOSCRIPT)$/.test(e.tagName)||(e.classList&&e.classList.contains('pop'));
+  [...document.body.children,...[...document.documentElement.children].filter(e=>e!==document.body&&e!==document.head)].forEach(e=>{if(!keep(e)&&!hid.some(h=>h[0]===e)){hid.push([e,e.style.getPropertyValue('display'),e.style.getPropertyPriority('display')]);e.style.setProperty('display','none','important')}})};
+ addEventListener('beforeprint',sweep);
+ addEventListener('afterprint',()=>{hid.forEach(([e,v,pr])=>{e.style.removeProperty('display');if(v)e.style.setProperty('display',v,pr)});hid=[]});
+ if(matchMedia){const m=matchMedia('print');(m.addEventListener?m.addEventListener('change',ev=>ev.matches&&sweep()):m.addListener&&m.addListener(ev=>ev.matches&&sweep()))}
+})();
+</script></body></html>
