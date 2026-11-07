@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}catch(e){}</script>
-<style>
+<style> 
 :root{--pg:#fff;--tx:#222;--pgi:none;--ff:'Times New Roman',serif;--fs:16px;--lh:1.5;--ti:1cm;--ta:justify;--bh:200mm;
  --ink:#1c1c21;--mut:#8b8b95;--line:#e6e6ea;--soft:#f6f6f8;--acc:#5b5fe0;--bg:#fff;--accs:var(--accs);--accb:var(--accb);--hov:var(--hov);--cv:var(--cv);--soft2:var(--soft2);--g0:var(--g0);--g1:var(--g1)}
 html[data-theme=dark]{--bg:#17181d;--ink:#e8e8ee;--mut:#8f90a0;--line:#2c2e38;--soft:#21232b;--acc:#8b8ff5;--accs:#2a2c4a;--accb:#4a4d86;--hov:#2b2d37;--cv:#101115;--soft2:#2a2c35;--g0:#cfd0da;--g1:#a9aab7;color-scheme:dark}
@@ -624,6 +624,16 @@ body,button,input,select,textarea,kbd,#tf em{font-family:'Google Sans','Product 
 #fszm div{padding:6px 14px;border-radius:4px;cursor:pointer;color:var(--g1)}
 #fszm div:hover{background:var(--soft)}
 #fszm div.sel{background:var(--accs);color:var(--acc)}
+ /* Ẩn Badge và Drawer của Netlify */
+  [data-netlify-deploy-id],
+  #netlify-badge,
+  iframe[src*="netlify"],
+  div[class*="netlify"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 </style></head><body>
 <div class="app">
  <nav class="rail">
